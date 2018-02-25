@@ -1,0 +1,349 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3D069BA320423BA90048FA74 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D069BA220423BA90048FA74 /* AppKit.framework */; };
+		3D069BA620423CD80048FA74 /* DragView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D069BA520423CD80048FA74 /* DragView.m */; };
+		3D069BA920430FD70048FA74 /* PPMImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D069BA820430FD70048FA74 /* PPMImageView.m */; };
+		3D3354B82041F5D60036F6EB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3354B72041F5D60036F6EB /* AppDelegate.m */; };
+		3D3354BB2041F5D60036F6EB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3354BA2041F5D60036F6EB /* ViewController.m */; };
+		3D3354BD2041F5D60036F6EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D3354BC2041F5D60036F6EB /* Assets.xcassets */; };
+		3D3354C02041F5D60036F6EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D3354BE2041F5D60036F6EB /* Main.storyboard */; };
+		3D3354C32041F5D60036F6EB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3354C22041F5D60036F6EB /* main.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3D069BA220423BA90048FA74 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		3D069BA420423CD80048FA74 /* DragView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DragView.h; sourceTree = "<group>"; };
+		3D069BA520423CD80048FA74 /* DragView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DragView.m; sourceTree = "<group>"; };
+		3D069BA720430FD70048FA74 /* PPMImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PPMImageView.h; sourceTree = "<group>"; };
+		3D069BA820430FD70048FA74 /* PPMImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PPMImageView.m; sourceTree = "<group>"; };
+		3D3354B32041F5D60036F6EB /* resize GUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "resize GUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D3354B62041F5D60036F6EB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		3D3354B72041F5D60036F6EB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		3D3354B92041F5D60036F6EB /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		3D3354BA2041F5D60036F6EB /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		3D3354BC2041F5D60036F6EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3D3354BF2041F5D60036F6EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3D3354C12041F5D60036F6EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D3354C22041F5D60036F6EB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3D3354C42041F5D60036F6EB /* resize_GUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = resize_GUI.entitlements; sourceTree = "<group>"; };
+		3D3354D420421A4F0036F6EB /* resize GUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "resize GUI.entitlements"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3D3354B02041F5D60036F6EB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D069BA320423BA90048FA74 /* AppKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3D069BA120423BA90048FA74 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3D069BA220423BA90048FA74 /* AppKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3D3354AA2041F5D60036F6EB = {
+			isa = PBXGroup;
+			children = (
+				3D3354B52041F5D60036F6EB /* resize GUI */,
+				3D3354B42041F5D60036F6EB /* Products */,
+				3D069BA120423BA90048FA74 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		3D3354B42041F5D60036F6EB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3D3354B32041F5D60036F6EB /* resize GUI.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3D3354B52041F5D60036F6EB /* resize GUI */ = {
+			isa = PBXGroup;
+			children = (
+				3D3354D420421A4F0036F6EB /* resize GUI.entitlements */,
+				3D3354B62041F5D60036F6EB /* AppDelegate.h */,
+				3D3354B72041F5D60036F6EB /* AppDelegate.m */,
+				3D3354B92041F5D60036F6EB /* ViewController.h */,
+				3D3354BA2041F5D60036F6EB /* ViewController.m */,
+				3D069BA420423CD80048FA74 /* DragView.h */,
+				3D069BA520423CD80048FA74 /* DragView.m */,
+				3D069BA720430FD70048FA74 /* PPMImageView.h */,
+				3D069BA820430FD70048FA74 /* PPMImageView.m */,
+				3D3354BC2041F5D60036F6EB /* Assets.xcassets */,
+				3D3354BE2041F5D60036F6EB /* Main.storyboard */,
+				3D3354C12041F5D60036F6EB /* Info.plist */,
+				3D3354C22041F5D60036F6EB /* main.m */,
+				3D3354C42041F5D60036F6EB /* resize_GUI.entitlements */,
+			);
+			path = "resize GUI";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3D3354B22041F5D60036F6EB /* resize GUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D3354C72041F5D60036F6EB /* Build configuration list for PBXNativeTarget "resize GUI" */;
+			buildPhases = (
+				3D3354AF2041F5D60036F6EB /* Sources */,
+				3D3354B02041F5D60036F6EB /* Frameworks */,
+				3D3354B12041F5D60036F6EB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "resize GUI";
+			productName = "resize GUI";
+			productReference = 3D3354B32041F5D60036F6EB /* resize GUI.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3D3354AB2041F5D60036F6EB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = "Omar Al-Ejel";
+				TargetAttributes = {
+					3D3354B22041F5D60036F6EB = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 3D3354AE2041F5D60036F6EB /* Build configuration list for PBXProject "resize GUI" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3D3354AA2041F5D60036F6EB;
+			productRefGroup = 3D3354B42041F5D60036F6EB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3D3354B22041F5D60036F6EB /* resize GUI */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3D3354B12041F5D60036F6EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D3354BD2041F5D60036F6EB /* Assets.xcassets in Resources */,
+				3D3354C02041F5D60036F6EB /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3D3354AF2041F5D60036F6EB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D3354BB2041F5D60036F6EB /* ViewController.m in Sources */,
+				3D3354C32041F5D60036F6EB /* main.m in Sources */,
+				3D069BA620423CD80048FA74 /* DragView.m in Sources */,
+				3D3354B82041F5D60036F6EB /* AppDelegate.m in Sources */,
+				3D069BA920430FD70048FA74 /* PPMImageView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		3D3354BE2041F5D60036F6EB /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3D3354BF2041F5D60036F6EB /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3D3354C52041F5D60036F6EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		3D3354C62041F5D60036F6EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		3D3354C82041F5D60036F6EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = DL7989H5XT;
+				INFOPLIST_FILE = "resize GUI/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "omaralejel.resize-GUI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3D3354C92041F5D60036F6EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = DL7989H5XT;
+				INFOPLIST_FILE = "resize GUI/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "omaralejel.resize-GUI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3D3354AE2041F5D60036F6EB /* Build configuration list for PBXProject "resize GUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D3354C52041F5D60036F6EB /* Debug */,
+				3D3354C62041F5D60036F6EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3D3354C72041F5D60036F6EB /* Build configuration list for PBXNativeTarget "resize GUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D3354C82041F5D60036F6EB /* Debug */,
+				3D3354C92041F5D60036F6EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3D3354AB2041F5D60036F6EB /* Project object */;
+}
