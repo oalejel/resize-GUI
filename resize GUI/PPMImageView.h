@@ -14,6 +14,7 @@
 @property (nonatomic) int imgWidth;
 @property (nonatomic) int imgHeight;
 @property (nonatomic) NSImageView *imgView;
+@property (nonatomic) UInt8 * table;
 
 - (id)initWithFrame:(NSRect)frameRect imageData:(NSData *)imgData;
 

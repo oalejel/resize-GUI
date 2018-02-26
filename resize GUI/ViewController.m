@@ -44,10 +44,12 @@
     imageDataString = [imageDataString stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
     imageDataString = [imageDataString stringByReplacingOccurrencesOfString:@"  " withString:@" "];
     
+//    [imageDataString replaceOccurrencesOfString:@"\n" withString:@" " options:NSLiteralSearch range:NSRangeFromString(imageDataString)];
+//    [imageDataString replaceOccurrencesOfString:@"  " withString:@" " options:NSLiteralSearch range:NSRangeFromString(imageDataString)];
+    
     NSArray *imageDataArray = [imageDataString componentsSeparatedByString:@" "];
     int width = [(NSString *)imageDataArray[1] intValue];
     int height = [(NSString *)imageDataArray[2] intValue];
-    
     
     //set window size
     NSRect rect = [[[NSApplication sharedApplication] mainWindow] frame];
@@ -57,25 +59,41 @@
     
     NSMutableData *pureData = [[NSMutableData alloc] init];
     
+    UInt8 table[[imageDataArray count]];
+    
     int offsetIndex = 4;
     for (int h = 0; h < height; h++) {
         for (int w = 0; w < width; w++) {
             //traverse through columns at every vertical level
-            uint8_t r = [(NSString *)imageDataArray[offsetIndex + (h * w) + (3 * w)] intValue];
-            uint8_t g = [(NSString *)imageDataArray[offsetIndex + (h * w) + (3 * w + 1)] intValue];
-            uint8_t b = [(NSString *)imageDataArray[offsetIndex + (h * w) + (3 * w + 2)] intValue];
-            uint32 rgb = 0;
-            rgb += g << 16;
-            rgb += b << 8;
+            UInt8 r = [(NSString *)imageDataArray[offsetIndex + (h * w) + (3 * w)] intValue];
+            UInt8 g = [(NSString *)imageDataArray[offsetIndex + (h * w) + (3 * w) + 1] intValue];
+            UInt8 b = [(NSString *)imageDataArray[offsetIndex + (h * w) + (3 * w) + 2] intValue];
+            UInt32 rgb = 0x000000;
+//            NSLog(@"%d, %d, %d", r, g, b);
+            rgb += b << 16;
+            rgb += g << 8;
             rgb += r;
+            
+            table[(h * w) + (3 * w)] = r;
+            table[(h * w) + (3 * w) + 1] = g;
+            table[(h * w) + (3 * w) + 2] = b;
+//            rgb = 0x0000ff;
             
             //lets try all black for now, and comment the above line
             [pureData appendBytes:&rgb length:3];
         }
     }
     
+//     UInt8 table[[pureData count]];
+    
+//    for (int i = 0; i < [imageDataArray count]; i++) {
+//        table[i] = (UInt8)imageDataArray[i];
+//        i++;
+//    }
+    
     NSRect zeroOriginRect = NSMakeRect(0, 0, rect.size.width, rect.size.height);
     PPMImageView *ppmView = [[PPMImageView alloc] initWithFrame:zeroOriginRect imageData:pureData];
+    [ppmView setTable:table];
     [self.view addSubview:ppmView];
     [ppmView setWantsLayer:true];
     [ppmView setNeedsDisplay:true];

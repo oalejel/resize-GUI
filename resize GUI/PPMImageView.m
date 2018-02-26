@@ -37,13 +37,31 @@ bool hasDrawn = false;
 
 - (void)refreshImage {
     if (self.imgData) {
-//        NSData *byteData = [NSData dataWithBytes:(__bridge const void * _Nullable)(self.imgData) length:self.imgData.length];
-        NSBitmapImageRep *bmpRep = [NSBitmapImageRep imageRepWithData:self.imgData];
-        NSSize imageSize = NSMakeSize(self.imgWidth, self.imgHeight);
-        
-        NSImage *bmpImage = [[NSImage alloc] initWithSize:imageSize];
-        [bmpImage addRepresentation:bmpRep];
+        CGDataProviderRef provider = CGDataProviderCreateWithData(nil, self.table, self.imgHeight * self.imgWidth * 3, nil);
+        CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
+        CGImageRef img = CGImageCreate(self.imgWidth,                         // width
+                                       self.imgHeight,                         // height
+                                       8,                          // bitsPerComponent
+                                       24,                         // bitsPerPixel
+                                       self.imgWidth * 3,            // bytesPerRow
+                                       space,                      // colorspace
+                                       kCGBitmapByteOrderMask,  // bitmapInfo
+                                       provider,                   // CGDataProvider
+                                       NULL,                       // decode array
+                                       NO,                         // shouldInterpolate
+                                       kCGRenderingIntentDefault); // intent
+
+        NSSize imgSize = NSMakeSize(self.imgWidth, self.imgHeight);
+        // use the created CGImage
+        NSImage *bmpImage = [[NSImage alloc] initWithCGImage:img size:imgSize];
         [self.imgView setImage:bmpImage];
+        
+        CGColorSpaceRelease(space);
+        CGDataProviderRelease(provider);
+        
+        
+        CGImageRelease(img);
+        
     } else {
         NSLog(@"no image data!");
     }
