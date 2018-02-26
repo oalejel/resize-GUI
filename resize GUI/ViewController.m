@@ -90,6 +90,8 @@
     
     NSRect zeroOriginRect = NSMakeRect(0, 0, rect.size.width, rect.size.height);
     PPMImageView *ppmView = [[PPMImageView alloc] initWithFrame:zeroOriginRect imageArray:table];
+    [ppmView setParentController:self];
+    
     [ppmView setFrameOrigin:NSZeroPoint];
     [ppmView setFrameSize:NSMakeSize(width, height)];
     [self.view addSubview:ppmView];
@@ -97,6 +99,12 @@
     [ppmView setNeedsDisplay:true];
     [self.view setNeedsDisplay:true];
     //note: ppmImageView should call refresh on drawrect
+}
+
+- (void)loadResizedImage {
+    //display loading indicator
+    //lock window size
+    
 }
 
 - (void)executeResize {

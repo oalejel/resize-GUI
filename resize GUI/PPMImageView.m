@@ -9,6 +9,13 @@
 #import "PPMImageView.h"
 #import "ResizingImageView.h"
 
+@interface PPMImageView () <CALayerDelegate>
+
+@property (nonatomic) NSVisualEffectView *vfxView;
+@property (nonatomic) NSTimer *resizeTimer;
+
+@end
+
 @implementation PPMImageView 
 
 bool hasDrawn = false;
@@ -33,10 +40,6 @@ bool hasDrawn = false;
         //register for window resizing observation
         NSWindow *mainWindow = [[NSApplication sharedApplication] mainWindow];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResize) name:NSWindowDidResizeNotification object:mainWindow];
-        
-        
-//        NSImageView *newImageView = [[NSImageView alloc] initWithFrame:frameRect];
-//        [self setImgView:newImageView];
     }
     return self;
 }
@@ -44,13 +47,66 @@ bool hasDrawn = false;
 - (void)windowDidResize {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSWindow *mainWindow = [[NSApplication sharedApplication] mainWindow];
-//        [self.imgView setFrameSize:mainWindow.frame.size];
-//        [self.imgView setFrameOrigin:NSZeroPoint];
-        [self.resizingImgView setFrameSize:mainWindow.frame.size];
-        [self.resizingImgView setFrameOrigin:NSZeroPoint];
-        [self setFrameSize:mainWindow.frame.size];
-        [self setFrameOrigin:NSZeroPoint];
+        NSRect newRect = NSMakeRect(0, 0, mainWindow.frame.size.width, mainWindow.frame.size.height);
+        [self.resizingImgView setFrame:newRect];
+        [self setFrame:newRect];
+        if (!self.vfxView) {
+            self.vfxView = [[NSVisualEffectView alloc] initWithFrame:newRect];
+            [self.vfxView setState:NSVisualEffectStateActive];
+            [self.vfxView setBlendingMode:NSVisualEffectBlendingModeWithinWindow];
+            [self.vfxView setMaterial:NSVisualEffectMaterialLight];
+            [self addSubview:self.vfxView];
+            
+            self.vfxView.alphaValue = 0;
+            [self fadeInVfxView];
+        } else if (!self.vfxView.superview) {
+            //in case it needs to be added back, animate in
+            [self addSubview:self.vfxView];
+            [self fadeInVfxView];
+        }
+        
+        [self.vfxView setFrame:newRect];
     });
+    
+    //start or reset a timer to keep track of whether the user has stopped resizing
+    if (self.resizeTimer) {
+        [self.resizeTimer invalidate];
+        self.resizeTimer = nil;
+    }
+    self.resizeTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 repeats:false block:^(NSTimer * _Nonnull timer) {
+        [self loadResizedImagewithBlock:^{
+            [self fadeOutVfxView];
+        }];
+    }];
+}
+
+- (void)loadResizedImagewithBlock:(void (^)(void))completionBlock {
+    [self.parentController loadResizedImage];
+    //once resized image is loaded, the controller will notify this existing ppmimageview
+    
+    //call completion block at end
+    completionBlock();
+}
+
+- (void)fadeInVfxView {
+    self.vfxView.alphaValue = 0;
+    [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+        context.duration = 0.3;
+        [[self.vfxView animator] setAlphaValue:1];
+    } completionHandler:^{
+    }];
+}
+
+- (void)fadeOutVfxView {
+    [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+        context.duration = 1;
+        self.vfxView.alphaValue = 0.3;
+        
+        [[self.vfxView animator] setAlphaValue:0];
+    } completionHandler:^{
+        [self.vfxView removeFromSuperview];
+        self.vfxView.alphaValue = 0.5;
+    }];
 }
 
 - (void)refreshImage {
@@ -58,16 +114,16 @@ bool hasDrawn = false;
         CGDataProviderRef provider = CGDataProviderCreateWithData(nil, self.dataArray, self.imgHeight * self.imgWidth * 3, nil);
         CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
         
-        CGImageRef img = CGImageCreate(self.imgWidth,                         // width
-                                       self.imgHeight,                         // height
+        CGImageRef img = CGImageCreate(self.imgWidth,              // width
+                                       self.imgHeight,             // height
                                        8,                          // bitsPerComponent
                                        24,                         // bitsPerPixel
-                                       self.imgWidth * 3,            // bytesPerRow
+                                       self.imgWidth * 3,          // bytesPerRow
                                        space,                      // colorspace
-                                       kCGBitmapByteOrderMask,  // bitmapInfo
+                                       kCGBitmapByteOrderMask,     // bitmapInfo
                                        provider,                   // CGDataProvider
-                                       nil,                 // decode array
-                                       false,                         // shouldInterpolate
+                                       nil,                        // decode array
+                                       false,                      // shouldInterpolate
                                        kCGRenderingIntentDefault); // intent
 
         NSSize imgSize = NSMakeSize(self.imgWidth, self.imgHeight);
@@ -137,9 +193,8 @@ bool hasDrawn = false;
     }
 }
 
--(void)dealloc {
+- (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
 }
 
 @end

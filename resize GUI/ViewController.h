@@ -11,6 +11,7 @@
 @interface ViewController : NSViewController
 
 - (void)setNewImage;
+- (void)loadResizedImage;
 
 @property (nonatomic) NSString *executablePath;
 @property (nonatomic) NSString *imagePath;
