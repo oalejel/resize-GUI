@@ -10,6 +10,7 @@
 		3D069BA320423BA90048FA74 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D069BA220423BA90048FA74 /* AppKit.framework */; };
 		3D069BA620423CD80048FA74 /* DragView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D069BA520423CD80048FA74 /* DragView.m */; };
 		3D069BA920430FD70048FA74 /* PPMImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D069BA820430FD70048FA74 /* PPMImageView.m */; };
+		3D240C302043D51500293271 /* ResizingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D240C2F2043D51500293271 /* ResizingImageView.m */; };
 		3D3354B82041F5D60036F6EB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3354B72041F5D60036F6EB /* AppDelegate.m */; };
 		3D3354BB2041F5D60036F6EB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3354BA2041F5D60036F6EB /* ViewController.m */; };
 		3D3354BD2041F5D60036F6EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D3354BC2041F5D60036F6EB /* Assets.xcassets */; };
@@ -23,6 +24,8 @@
 		3D069BA520423CD80048FA74 /* DragView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DragView.m; sourceTree = "<group>"; };
 		3D069BA720430FD70048FA74 /* PPMImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PPMImageView.h; sourceTree = "<group>"; };
 		3D069BA820430FD70048FA74 /* PPMImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PPMImageView.m; sourceTree = "<group>"; };
+		3D240C2E2043D51500293271 /* ResizingImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResizingImageView.h; sourceTree = "<group>"; };
+		3D240C2F2043D51500293271 /* ResizingImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ResizingImageView.m; sourceTree = "<group>"; };
 		3D3354B32041F5D60036F6EB /* resize GUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "resize GUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D3354B62041F5D60036F6EB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3D3354B72041F5D60036F6EB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -85,6 +88,8 @@
 				3D069BA520423CD80048FA74 /* DragView.m */,
 				3D069BA720430FD70048FA74 /* PPMImageView.h */,
 				3D069BA820430FD70048FA74 /* PPMImageView.m */,
+				3D240C2E2043D51500293271 /* ResizingImageView.h */,
+				3D240C2F2043D51500293271 /* ResizingImageView.m */,
 				3D3354BC2041F5D60036F6EB /* Assets.xcassets */,
 				3D3354BE2041F5D60036F6EB /* Main.storyboard */,
 				3D3354C12041F5D60036F6EB /* Info.plist */,
@@ -170,6 +175,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D3354BB2041F5D60036F6EB /* ViewController.m in Sources */,
+				3D240C302043D51500293271 /* ResizingImageView.m in Sources */,
 				3D3354C32041F5D60036F6EB /* main.m in Sources */,
 				3D069BA620423CD80048FA74 /* DragView.m in Sources */,
 				3D3354B82041F5D60036F6EB /* AppDelegate.m in Sources */,

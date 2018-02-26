@@ -90,6 +90,8 @@
     
     NSRect zeroOriginRect = NSMakeRect(0, 0, rect.size.width, rect.size.height);
     PPMImageView *ppmView = [[PPMImageView alloc] initWithFrame:zeroOriginRect imageArray:table];
+    [ppmView setFrameOrigin:NSZeroPoint];
+    [ppmView setFrameSize:NSMakeSize(width, height)];
     [self.view addSubview:ppmView];
     [ppmView setWantsLayer:true];
     [ppmView setNeedsDisplay:true];

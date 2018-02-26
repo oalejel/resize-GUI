@@ -7,6 +7,7 @@
 //
 
 #import "PPMImageView.h"
+#import "ResizingImageView.h"
 
 @implementation PPMImageView 
 
@@ -29,10 +30,27 @@ bool hasDrawn = false;
         [self setImgWidth:frameRect.size.width];
         [self setImgHeight:frameRect.size.height];
         
-        NSImageView *newImageView = [[NSImageView alloc] initWithFrame:frameRect];
-        [self setImgView:newImageView];
+        //register for window resizing observation
+        NSWindow *mainWindow = [[NSApplication sharedApplication] mainWindow];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResize) name:NSWindowDidResizeNotification object:mainWindow];
+        
+        
+//        NSImageView *newImageView = [[NSImageView alloc] initWithFrame:frameRect];
+//        [self setImgView:newImageView];
     }
     return self;
+}
+
+- (void)windowDidResize {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSWindow *mainWindow = [[NSApplication sharedApplication] mainWindow];
+//        [self.imgView setFrameSize:mainWindow.frame.size];
+//        [self.imgView setFrameOrigin:NSZeroPoint];
+        [self.resizingImgView setFrameSize:mainWindow.frame.size];
+        [self.resizingImgView setFrameOrigin:NSZeroPoint];
+        [self setFrameSize:mainWindow.frame.size];
+        [self setFrameOrigin:NSZeroPoint];
+    });
 }
 
 - (void)refreshImage {
@@ -55,7 +73,17 @@ bool hasDrawn = false;
         NSSize imgSize = NSMakeSize(self.imgWidth, self.imgHeight);
         // use the created CGImage
         NSImage *bmpImage = [[NSImage alloc] initWithCGImage:img size:imgSize];
-        [self.imgView setImage:bmpImage];
+        [bmpImage setResizingMode:NSImageResizingModeStretch];
+        
+        NSRect imgRect = NSMakeRect(0, 0, self.imgWidth, self.imgHeight);
+        if (self.resizingImgView) {
+            [self.resizingImgView removeFromSuperview];
+        }
+        ResizingImageView *resizingImgView = [[ResizingImageView alloc] initWithFrame:imgRect andImage:bmpImage];
+        [self setResizingImgView: resizingImgView];
+        [self addSubview:self.resizingImgView];
+        
+        ///[self.imgView setImage:bmpImage];
         
         CGColorSpaceRelease(space);
         CGDataProviderRelease(provider);
@@ -73,28 +101,45 @@ bool hasDrawn = false;
     [self drawRect:rect];
 }
 
+
+
 - (void)drawRect:(NSRect)dirtyRect {
-    
 //    [self.layer setBackgroundColor:[[NSColor redColor] CGColor]];
     [super drawRect:dirtyRect];
     if (!hasDrawn) {
-        [self addSubview:self.imgView];
-        //add constraints
-        NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1 constant:0];
-        [self.imgView addConstraint:topConstraint];
-        
-        NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:0];
-        [self.imgView addConstraint:bottomConstraint];
-        
-        NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeading multiplier:1 constant:0];
-        [self.imgView addConstraint:leftConstraint];
-        
-        NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTrailing multiplier:1 constant:0];
-        [self.imgView addConstraint:rightConstraint];
-        
+        ///[self.imgView setAutoresizingMask:NSViewHeightSizable | NSViewWidthSizable];
+//
+//        //add constraints
+//        [[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1 constant:0] setActive:true];
+////        [self addConstraint:topConstraint];
+//
+//        [[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:0] setActive:true];
+////        [self addConstraint:bottomConstraint];
+//
+//        [[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeading multiplier:1 constant:0] setActive:true];
+////        [self addConstraint:leftConstraint];
+//
+//        [[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTrailing multiplier:1 constant:0] setActive:true];
+////        [[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:true];
+////
+////         [[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:true];
+
+//        [[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.superview attribute:NSLayoutAttributeTop multiplier:1 constant:0] setActive:true];
+//
+//        [[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.superview attribute:NSLayoutAttributeBottom multiplier:1 constant:0] setActive:true];
+//
+//        [[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.superview attribute:NSLayoutAttributeLeading multiplier:1 constant:0] setActive:true];
+//
+//        [[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.superview attribute:NSLayoutAttributeTrailing multiplier:1 constant:0] setActive:true];
+
         [self refreshImage];
         hasDrawn = true;
     }
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
 }
 
 @end

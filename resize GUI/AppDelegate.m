@@ -16,7 +16,8 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
-    
+    NSWindow *mainWindow = [[NSApplication sharedApplication] mainWindow];
+    [mainWindow setStyleMask:[mainWindow styleMask] | NSWindowStyleMaskResizable];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

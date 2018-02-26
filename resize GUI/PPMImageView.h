@@ -7,13 +7,16 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "ResizingImageView.h"
 
 @interface PPMImageView : NSView <CALayerDelegate>
 
 @property (nonatomic) int imgWidth;
 @property (nonatomic) int imgHeight;
-@property (nonatomic) NSImageView *imgView;
+///@property (nonatomic) NSImageView *imgView;
+@property (nonatomic) ResizingImageView *resizingImgView;
 @property (nonatomic) UInt8 * dataArray;
+
 
 - (id)initWithFrame:(NSRect)frameRect imageArray:(UInt8 *)dataArray;
 
