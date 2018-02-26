@@ -14,11 +14,11 @@
 
 @property (nonatomic) int imgWidth;
 @property (nonatomic) int imgHeight;
-///@property (nonatomic) NSImageView *imgView;
 @property (nonatomic) ResizingImageView *resizingImgView;
 @property (atomic) UInt8 * dataArray;
 @property (nonatomic, weak) ViewController *parentController;
 
 - (id)initWithFrame:(NSRect)frameRect imageArray:(UInt8 *)dataArray;
+- (void)refreshImage;
 
 @end

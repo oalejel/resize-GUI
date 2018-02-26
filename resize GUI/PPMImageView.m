@@ -13,6 +13,7 @@
 
 @property (nonatomic) NSVisualEffectView *vfxView;
 @property (nonatomic) NSTimer *resizeTimer;
+//@property (nonatomic) NSProgressIndicator *progressInd;
 
 @end
 
@@ -38,7 +39,7 @@ bool hasDrawn = false;
         [self setImgHeight:frameRect.size.height];
         
         //register for window resizing observation
-        NSWindow *mainWindow = [[NSApplication sharedApplication] mainWindow];
+        NSWindow *mainWindow = [[NSApplication sharedApplication] windows][0];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResize) name:NSWindowDidResizeNotification object:mainWindow];
     }
     return self;
@@ -46,7 +47,7 @@ bool hasDrawn = false;
 
 - (void)windowDidResize {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSWindow *mainWindow = [[NSApplication sharedApplication] mainWindow];
+        NSWindow *mainWindow = [[NSApplication sharedApplication] windows][0];
         NSRect newRect = NSMakeRect(0, 0, mainWindow.frame.size.width, mainWindow.frame.size.height);
         [self.resizingImgView setFrame:newRect];
         [self setFrame:newRect];
@@ -62,9 +63,9 @@ bool hasDrawn = false;
         } else if (!self.vfxView.superview) {
             //in case it needs to be added back, animate in
             [self addSubview:self.vfxView];
-            [self fadeInVfxView];
         }
         
+        [self fadeInVfxView];
         [self.vfxView setFrame:newRect];
     });
     
@@ -73,7 +74,9 @@ bool hasDrawn = false;
         [self.resizeTimer invalidate];
         self.resizeTimer = nil;
     }
-    self.resizeTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 repeats:false block:^(NSTimer * _Nonnull timer) {
+    self.resizeTimer = [NSTimer scheduledTimerWithTimeInterval:0.4 repeats:false block:^(NSTimer * _Nonnull timer) {
+        //display progress indicator
+//        [self showProgressIndicator];
         [self loadResizedImagewithBlock:^{
             [self fadeOutVfxView];
         }];
@@ -81,33 +84,49 @@ bool hasDrawn = false;
 }
 
 - (void)loadResizedImagewithBlock:(void (^)(void))completionBlock {
-    [self.parentController loadResizedImage];
+    [self.parentController loadResizedImagewithBlock:completionBlock];
     //once resized image is loaded, the controller will notify this existing ppmimageview
-    
-    //call completion block at end
-    completionBlock();
 }
 
 - (void)fadeInVfxView {
-    self.vfxView.alphaValue = 0;
+    [self addSubview:self.vfxView positioned:NSWindowAbove relativeTo:self.resizingImgView];
     [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
-        context.duration = 0.3;
+        context.duration = 0.2;
         [[self.vfxView animator] setAlphaValue:1];
     } completionHandler:^{
+        [self.vfxView setAlphaValue:1];
     }];
 }
 
 - (void)fadeOutVfxView {
-    [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
-        context.duration = 1;
-        self.vfxView.alphaValue = 0.3;
-        
-        [[self.vfxView animator] setAlphaValue:0];
-    } completionHandler:^{
-        [self.vfxView removeFromSuperview];
-        self.vfxView.alphaValue = 0.5;
-    }];
+        [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+            NSLog(@"fading out vibrant view");
+            context.duration = 0.2;
+            [[self.vfxView animator] setAlphaValue:0];
+        } completionHandler:^{
+            NSLog(@"completion out vibrant view");
+            [self.vfxView setAlphaValue:0];
+            [self.vfxView removeFromSuperview];
+        }];
 }
+
+//- (void)showProgressIndicator {
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        NSWindow *mainWindow = [[NSApplication sharedApplication] windows][0];
+//        float width = mainWindow.frame.size.width;
+//        float height = mainWindow.frame.size.height;
+//        NSRect progressRect = NSMakeRect(0.5 * width - 50, 0.5 * height - 50, 100, 100);
+//
+//        self.progressInd = [[NSProgressIndicator alloc] initWithFrame:progressRect];
+//        [self.progressInd setStyle:NSProgressIndicatorSpinningStyle];
+//        [self.progressInd setIndeterminate:true];
+//        [self.progressInd setUsesThreadedAnimation:false];
+//
+//        [self addSubview:self.progressInd positioned:NSWindowAbove relativeTo:self.vfxView];
+//        [self.progressInd startAnimation:self];
+//        [self.progressInd setNeedsDisplay:true];
+//    });
+//}
 
 - (void)refreshImage {
     if (self.dataArray) {
@@ -135,11 +154,9 @@ bool hasDrawn = false;
         if (self.resizingImgView) {
             [self.resizingImgView removeFromSuperview];
         }
-        ResizingImageView *resizingImgView = [[ResizingImageView alloc] initWithFrame:imgRect andImage:bmpImage];
-        [self setResizingImgView: resizingImgView];
-        [self addSubview:self.resizingImgView];
-        
-        ///[self.imgView setImage:bmpImage];
+        self.resizingImgView = [[ResizingImageView alloc] initWithFrame:imgRect andImage:bmpImage];
+        [self setResizingImgView: self.resizingImgView];
+        [self addSubview:self.resizingImgView positioned:NSWindowBelow relativeTo:self.vfxView];
         
         CGColorSpaceRelease(space);
         CGDataProviderRelease(provider);
@@ -157,37 +174,9 @@ bool hasDrawn = false;
     [self drawRect:rect];
 }
 
-
-
 - (void)drawRect:(NSRect)dirtyRect {
-//    [self.layer setBackgroundColor:[[NSColor redColor] CGColor]];
     [super drawRect:dirtyRect];
     if (!hasDrawn) {
-        ///[self.imgView setAutoresizingMask:NSViewHeightSizable | NSViewWidthSizable];
-//
-//        //add constraints
-//        [[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1 constant:0] setActive:true];
-////        [self addConstraint:topConstraint];
-//
-//        [[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:0] setActive:true];
-////        [self addConstraint:bottomConstraint];
-//
-//        [[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeading multiplier:1 constant:0] setActive:true];
-////        [self addConstraint:leftConstraint];
-//
-//        [[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTrailing multiplier:1 constant:0] setActive:true];
-////        [[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:true];
-////
-////         [[NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:0] setActive:true];
-
-//        [[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.superview attribute:NSLayoutAttributeTop multiplier:1 constant:0] setActive:true];
-//
-//        [[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.superview attribute:NSLayoutAttributeBottom multiplier:1 constant:0] setActive:true];
-//
-//        [[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.superview attribute:NSLayoutAttributeLeading multiplier:1 constant:0] setActive:true];
-//
-//        [[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.superview attribute:NSLayoutAttributeTrailing multiplier:1 constant:0] setActive:true];
-
         [self refreshImage];
         hasDrawn = true;
     }

@@ -11,6 +11,12 @@
 #import "DragView.h"
 #import "PPMImageView.h"
 
+@interface ViewController ()
+
+@property (nonatomic) PPMImageView *ppmView;
+
+@end
+
 @implementation ViewController
     
     /*
@@ -34,37 +40,46 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [(DragView *)self.view setParentController:self];
 }
 
 - (void)setNewImage {
-    
-//    NSData *rawFileData = [NSData dataWithContentsOfFile:self.imagePath];
-//    NSString *fileString =
     NSError *err;
     NSString *imageDataString = [NSString stringWithContentsOfFile:self.imagePath encoding:NSUTF8StringEncoding error:&err];
-//    NSString *imageDataString = [[NSString alloc] initWithData:rawFileData encoding:NSUTF8StringEncoding];
-    
     if (err) {
         NSLog(@"%@", err);
     }
+    [self parseImageDataString:imageDataString];
     
+    //after parsing our original image, we set max width and height
+    NSWindow *mainWindow = [[NSApplication sharedApplication] windows][0];
+    [mainWindow setContentMaxSize:mainWindow.frame.size];
+    [mainWindow setMaxSize:mainWindow.frame.size];
+    
+    //deactivate all constraints to allow image to be shrunk
+    for (NSLayoutConstraint *c in self.view.constraints) {
+        [c setActive:false];
+    }
+}
+
+- (void)parseImageDataString:(NSString *)imageDataString {
     imageDataString = [imageDataString stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
     imageDataString = [imageDataString stringByReplacingOccurrencesOfString:@"  " withString:@" "];
-    
-//    [imageDataString replaceOccurrencesOfString:@"\n" withString:@" " options:NSLiteralSearch range:NSRangeFromString(imageDataString)];
-//    [imageDataString replaceOccurrencesOfString:@"  " withString:@" " options:NSLiteralSearch range:NSRangeFromString(imageDataString)];
     
     NSArray *imageDataArray = [imageDataString componentsSeparatedByString:@" "];
     int width = [(NSString *)imageDataArray[1] intValue];
     int height = [(NSString *)imageDataArray[2] intValue];
     
-    //set window size
-    NSRect rect = [[[NSApplication sharedApplication] mainWindow] frame];
+    //set window size and constraints
+    NSWindow *mainWindow = [[NSApplication sharedApplication] windows][0];
+    NSRect rect = [[[NSApplication sharedApplication] windows][0] frame];
     rect.size.width = width;
     rect.size.height = height;
-    [[[NSApplication sharedApplication] mainWindow] setFrame:rect display:true];
+    [mainWindow setFrame:rect display:true animate:true];
+    
+    //set window title
+    NSString *titleString = [NSString stringWithFormat:@"%d x %d — %@", width, height, self.imagePath];
+    [mainWindow setTitle:titleString];
     
     //to store our pixel data
     UInt8 table[[imageDataArray count] * 3];
@@ -76,7 +91,7 @@
             UInt8 r = [(NSString *)imageDataArray[offsetIndex + (h * width * 3) + (3 * w)] intValue];
             UInt8 g = [(NSString *)imageDataArray[offsetIndex + (h * width * 3) + (3 * w) + 1] intValue];
             UInt8 b = [(NSString *)imageDataArray[offsetIndex + (h * width * 3) + (3 * w) + 2] intValue];
-
+            
             UInt32 rgb = 0x000000;
             rgb += b << 16;
             rgb += g << 8;
@@ -89,28 +104,53 @@
     }
     
     NSRect zeroOriginRect = NSMakeRect(0, 0, rect.size.width, rect.size.height);
-    PPMImageView *ppmView = [[PPMImageView alloc] initWithFrame:zeroOriginRect imageArray:table];
-    [ppmView setParentController:self];
+    if (self.ppmView) {
+        [self.ppmView setDataArray:table];
+        [self.ppmView setImgWidth:width];
+        [self.ppmView setImgHeight:height];
+        [self.ppmView refreshImage];
+        
+    } else {
+        self.ppmView = [[PPMImageView alloc] initWithFrame:zeroOriginRect imageArray:table];
+        [self.ppmView setParentController:self];
+    }
     
-    [ppmView setFrameOrigin:NSZeroPoint];
-    [ppmView setFrameSize:NSMakeSize(width, height)];
-    [self.view addSubview:ppmView];
-    [ppmView setWantsLayer:true];
-    [ppmView setNeedsDisplay:true];
+    [self.ppmView setFrame:zeroOriginRect];
+    [self.view addSubview:self.ppmView];
+    [self.ppmView setWantsLayer:true];
+    [self.ppmView setNeedsDisplay:true];
     [self.view setNeedsDisplay:true];
-    //note: ppmImageView should call refresh on drawrect
 }
 
-- (void)loadResizedImage {
-    //display loading indicator
+- (void)loadResizedImagewithBlock:(void (^)(void))completionBlock {
     //lock window size
-    
+    NSWindow *mainWindow = [[NSApplication sharedApplication] mainWindow];
+    [mainWindow setStyleMask:[mainWindow styleMask] & ~NSWindowStyleMaskResizable];
+    //execute resize, and perform completion
+    [self executeResize];
+    NSError *err;
+    NSString *imageDataString = [NSString stringWithContentsOfFile:@"resized.ppm" encoding:NSUTF8StringEncoding error:&err];
+    if (imageDataString && !err) {
+        //parses image and writes to ppm view
+        [self parseImageDataString:imageDataString];
+        //remove progress indicator
+        
+    } else {
+        NSLog(@"%@", err);
+    }
+    //allow window resizing
+    [mainWindow setStyleMask:[mainWindow styleMask] | NSWindowStyleMaskResizable];
+    //call completion block
+    completionBlock();
 }
 
-- (void)executeResize {
-//    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"resize" ofType:@""];
-//    NSString *horsePath = [[NSBundle mainBundle] pathForResource:@"horses" ofType:@".ppm"];
-    NSArray *tempArgs = [NSArray arrayWithObjects: self.imagePath, @"modified.ppm", @"200", nil];
+- (NSString *)executeResize {
+    NSWindow *mainWindow = [[NSApplication sharedApplication] windows][0];
+    
+    NSString *widthArg = [NSString stringWithFormat:@"%d", (int)ceil(mainWindow.frame.size.width)];
+    NSString *heightArg = [NSString stringWithFormat:@"%d", (int)ceil(mainWindow.frame.size.height)];
+    
+    NSArray *tempArgs = [NSArray arrayWithObjects: self.imagePath, @"resized.ppm", widthArg, heightArg, nil];
     
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:self.executablePath];
@@ -124,14 +164,32 @@
     [task launch];
     
     NSData *data = [[pipe fileHandleForReading] readDataToEndOfFile];
-    NSString *ouputString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSString *outputString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
     NSData *errData = [[errorPipe fileHandleForReading] readDataToEndOfFile];
     NSString *errOutputString = [[NSString alloc] initWithData:errData encoding:NSUTF8StringEncoding];
     
     NSLog(@"%@", errOutputString);
-    NSLog(@"%@", ouputString);
+    NSLog(@"%@", outputString);
+    //if error is not an empty string
+    if (![errOutputString isEqualToString:@""]) {
+        return nil;
+    }
+    
+    return outputString;
 }
+
+#pragma mark  - resetting state to original
+- (void)clearImage {
+    //reactive all constraints to allow image to be shrunk
+    for (NSLayoutConstraint *c in self.view.constraints) {
+        [c setActive:true];
+    }
+}
+
+
+
+
 
 - (void)setRepresentedObject:(id)representedObject {
     [super setRepresentedObject:representedObject];
