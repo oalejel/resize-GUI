@@ -10,12 +10,11 @@
 
 @interface PPMImageView : NSView <CALayerDelegate>
 
-@property (nonatomic) NSData *imgData;
 @property (nonatomic) int imgWidth;
 @property (nonatomic) int imgHeight;
 @property (nonatomic) NSImageView *imgView;
-@property (nonatomic) UInt8 * table;
+@property (nonatomic) UInt8 * dataArray;
 
-- (id)initWithFrame:(NSRect)frameRect imageData:(NSData *)imgData;
+- (id)initWithFrame:(NSRect)frameRect imageArray:(UInt8 *)dataArray;
 
 @end

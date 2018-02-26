@@ -22,10 +22,10 @@ bool hasDrawn = false;
     return self;
 }
 
-- (id)initWithFrame:(NSRect)frameRect imageData:(NSMutableData *)imgData {
+- (id)initWithFrame:(NSRect)frameRect imageArray:(UInt8 *)dataArray {
     self = [self initWithFrame:frameRect];
     if (self) {
-        [self setImgData:imgData];
+        [self setDataArray:dataArray];
         [self setImgWidth:frameRect.size.width];
         [self setImgHeight:frameRect.size.height];
         
@@ -36,9 +36,10 @@ bool hasDrawn = false;
 }
 
 - (void)refreshImage {
-    if (self.imgData) {
-        CGDataProviderRef provider = CGDataProviderCreateWithData(nil, self.table, self.imgHeight * self.imgWidth * 3, nil);
+    if (self.dataArray) {
+        CGDataProviderRef provider = CGDataProviderCreateWithData(nil, self.dataArray, self.imgHeight * self.imgWidth * 3, nil);
         CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
+        
         CGImageRef img = CGImageCreate(self.imgWidth,                         // width
                                        self.imgHeight,                         // height
                                        8,                          // bitsPerComponent
@@ -47,8 +48,8 @@ bool hasDrawn = false;
                                        space,                      // colorspace
                                        kCGBitmapByteOrderMask,  // bitmapInfo
                                        provider,                   // CGDataProvider
-                                       NULL,                       // decode array
-                                       NO,                         // shouldInterpolate
+                                       nil,                 // decode array
+                                       false,                         // shouldInterpolate
                                        kCGRenderingIntentDefault); // intent
 
         NSSize imgSize = NSMakeSize(self.imgWidth, self.imgHeight);
@@ -59,9 +60,7 @@ bool hasDrawn = false;
         CGColorSpaceRelease(space);
         CGDataProviderRelease(provider);
         
-        
         CGImageRelease(img);
-        
     } else {
         NSLog(@"no image data!");
     }
@@ -80,21 +79,22 @@ bool hasDrawn = false;
     [super drawRect:dirtyRect];
     if (!hasDrawn) {
         [self addSubview:self.imgView];
+        //add constraints
+        NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1 constant:0];
+        [self.imgView addConstraint:topConstraint];
+        
+        NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:0];
+        [self.imgView addConstraint:bottomConstraint];
+        
+        NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeading multiplier:1 constant:0];
+        [self.imgView addConstraint:leftConstraint];
+        
+        NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:self.imgView attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTrailing multiplier:1 constant:0];
+        [self.imgView addConstraint:rightConstraint];
+        
         [self refreshImage];
         hasDrawn = true;
     }
 }
-    
-    
-//    CGImageRef ref = CGImageCreate(dirtyRect.size.width, dirtyRect.size.height, 8, 24, dirtyRect.size.width * 3, CGColorSpaceCreateDeviceRGB(), kCGBitmapByteOrderMask, CGDataProviderCreateWithData(<#void * _Nullable info#>, <#const void * _Nullable data#>, dirtyRect.size.width * dirtyRect.size.height * 3, nil), 0, false, kCGPDFContextOutputIntent);
-//
-//    NSImage *img = [[NSImage alloc] initWithCGImage:ref size:NSMakeSize(dirtyRect.size.width, dirtyRect.size.height)];
-//
-//    //alternative
-//
-//    [otherImg addRepresentation:imageRep]
-    
-    
-    // Drawing code here.
 
 @end
