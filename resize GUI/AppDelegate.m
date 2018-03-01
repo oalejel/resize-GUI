@@ -16,14 +16,13 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
-    NSWindow *mainWindow = [[NSApplication sharedApplication] windows][0];
-    [mainWindow setStyleMask:[mainWindow styleMask] | NSWindowStyleMaskResizable];
-    [mainWindow setTitle:@"EECS 280 Project 2 – Resize GUI"];
+    
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application
 }
+
 
 
 @end

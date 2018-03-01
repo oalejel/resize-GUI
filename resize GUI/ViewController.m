@@ -14,6 +14,7 @@
 @interface ViewController ()
 
 @property (nonatomic) PPMImageView *ppmView;
+@property (strong) NSArray *savedConstraints;
 
 @end
 
@@ -41,6 +42,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [(DragView *)self.view setParentController:self];
+    [self resetTitle];
 }
 
 - (void)setNewImage {
@@ -57,6 +59,7 @@
     [mainWindow setMaxSize:mainWindow.frame.size];
     
     //deactivate all constraints to allow image to be shrunk
+    self.savedConstraints = self.view.constraints;
     for (NSLayoutConstraint *c in self.view.constraints) {
         [c setActive:false];
     }
@@ -75,10 +78,12 @@
     NSRect rect = [[[NSApplication sharedApplication] windows][0] frame];
     rect.size.width = width;
     rect.size.height = height;
-    [mainWindow setFrame:rect display:true animate:true];
+    [mainWindow setFrame:rect display:false animate:true];
     
     //set window title
-    NSString *titleString = [NSString stringWithFormat:@"%d x %d — %@", width, height, self.imagePath];
+    NSString *documentDirectory = [self.imagePath stringByDeletingLastPathComponent];
+    NSString *documentName = [self.imagePath substringFromIndex:documentDirectory.length + 1];
+    NSString *titleString = [NSString stringWithFormat:@"%d x %d — %@", width, height, documentName];
     [mainWindow setTitle:titleString];
     
     //to store our pixel data
@@ -91,11 +96,6 @@
             UInt8 r = [(NSString *)imageDataArray[offsetIndex + (h * width * 3) + (3 * w)] intValue];
             UInt8 g = [(NSString *)imageDataArray[offsetIndex + (h * width * 3) + (3 * w) + 1] intValue];
             UInt8 b = [(NSString *)imageDataArray[offsetIndex + (h * width * 3) + (3 * w) + 2] intValue];
-            
-            UInt32 rgb = 0x000000;
-            rgb += b << 16;
-            rgb += g << 8;
-            rgb += r;
             
             table[(h * width * 3) + (3 * w)] = r;
             table[(h * width * 3) + (3 * w) + 1] = g;
@@ -124,7 +124,7 @@
 
 - (void)loadResizedImagewithBlock:(void (^)(void))completionBlock {
     //lock window size
-    NSWindow *mainWindow = [[NSApplication sharedApplication] mainWindow];
+    NSWindow *mainWindow = [[NSApplication sharedApplication] windows][0];
     [mainWindow setStyleMask:[mainWindow styleMask] & ~NSWindowStyleMaskResizable];
     //execute resize, and perform completion
     [self executeResize];
@@ -133,8 +133,6 @@
     if (imageDataString && !err) {
         //parses image and writes to ppm view
         [self parseImageDataString:imageDataString];
-        //remove progress indicator
-        
     } else {
         NSLog(@"%@", err);
     }
@@ -180,20 +178,45 @@
 }
 
 #pragma mark  - resetting state to original
-- (void)clearImage {
+
+- (void)newDocument:(void *)obj {
     //reactive all constraints to allow image to be shrunk
-    for (NSLayoutConstraint *c in self.view.constraints) {
-        [c setActive:true];
-    }
+    [self.view addConstraints:self.savedConstraints];
+    [self.view updateConstraints];
+    
+    NSError *err;
+    [[NSFileManager defaultManager] removeItemAtPath:@"resized.ppm" error:&err];
+    if (err) {NSLog(@"%@", err);}
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self.ppmView];
+    self.executablePath = nil;
+    [self.ppmView removeFromSuperview];
+    self.ppmView = nil;
+    self.imagePath = nil;
+    [self resetTitle];
+    [(DragView *)self.view resetState];
+    
+    //allow window to size appropriately
+    NSWindow *mainWindow = [[NSApplication sharedApplication] windows][0];
+    NSRect standardRect = NSMakeRect(mainWindow.frame.origin.x, mainWindow.frame.origin.y, 450, 400);
+    
+    [mainWindow setContentMaxSize:standardRect.size];
+    [mainWindow setMaxSize:standardRect.size];
+    [mainWindow setFrame:standardRect display:true animate:true];
+    [self.view setNeedsDisplay:true];
+    [self.view layoutSubtreeIfNeeded];
+
 }
 
-
-
-
+- (void)resetTitle {
+    NSWindow *mainWindow = [[NSApplication sharedApplication] windows][0];
+    [mainWindow setStyleMask:[mainWindow styleMask] | NSWindowStyleMaskResizable];
+    [mainWindow setTitle:@"EECS 280 Project 2 – Resize GUI"];
+}
 
 - (void)setRepresentedObject:(id)representedObject {
     [super setRepresentedObject:representedObject];
-
+     
     // Update the view, if already loaded.
 }
 

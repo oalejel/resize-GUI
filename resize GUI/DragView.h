@@ -12,12 +12,14 @@
 
 @interface DragView : NSView
 
+
+@property (weak) ViewController *parentController;
 @property (weak) IBOutlet NSBox *dragBox;
 @property (weak) IBOutlet NSTextField *infoField;
 
-@property (weak) ViewController *parentController;
-
 @property (nonatomic) NSString *execPath;
 @property (nonatomic) NSString *imagePath;
+
+- (void)resetState;
 
 @end

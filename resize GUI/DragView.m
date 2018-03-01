@@ -75,9 +75,12 @@ bool hasImage = false;
     });
 }
 
-- (void)clearImage {
-    //resets app state
-//    [self.dragBox setAlphaValue:1.0];
+- (void)resetState {
+    //resets drag view state for new image
+    self.execPath = nil;
+    self.imagePath = nil;
+    hasImage = false;
+    hasExecutable = false;
 }
 
 //more customizational aspects of drag and drop

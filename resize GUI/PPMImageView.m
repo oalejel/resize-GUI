@@ -13,13 +13,14 @@
 
 @property (nonatomic) NSVisualEffectView *vfxView;
 @property (nonatomic) NSTimer *resizeTimer;
+@property bool hasDrawn;
 //@property (nonatomic) NSProgressIndicator *progressInd;
 
 @end
 
 @implementation PPMImageView 
 
-bool hasDrawn = false;
+
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
     self = [super initWithFrame:frameRect];
@@ -100,11 +101,9 @@ bool hasDrawn = false;
 
 - (void)fadeOutVfxView {
         [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
-            NSLog(@"fading out vibrant view");
             context.duration = 0.2;
             [[self.vfxView animator] setAlphaValue:0];
         } completionHandler:^{
-            NSLog(@"completion out vibrant view");
             [self.vfxView setAlphaValue:0];
             [self.vfxView removeFromSuperview];
         }];
@@ -176,9 +175,9 @@ bool hasDrawn = false;
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
-    if (!hasDrawn) {
+    if (!self.hasDrawn) {
         [self refreshImage];
-        hasDrawn = true;
+        self.hasDrawn = true;
     }
 }
 
