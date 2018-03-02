@@ -14,14 +14,9 @@ bool didDraw = false;
 bool hasExecutable = false;
 bool hasImage = false;
 
-- (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
-    // Drawing code here.
-    
-    if (!didDraw) {
-        [self registerForDraggedTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]];
-        didDraw = true;
-    }
+-(void)viewDidMoveToSuperview {
+    //must register for certain drag types to recieve protocol calls
+    [self registerForDraggedTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]];
 }
 
 //called when drag has been dropped
@@ -61,10 +56,8 @@ bool hasImage = false;
         } else if (!hasImage && hasExecutable) {
             [self.infoField setPlaceholderString:@"Drag and Drop .ppm image file"];
         } else {
-            //at this point, our program should be displaying the image, and showing a clear button beneath this view
-            
-            //to prepare for future clearing, we reset our states
-//            [self.dragBox setAlphaValue:0.0];
+            //at this point, our program should be displaying the image
+            //we reset the image dragbox states so that when a new image is ready to be dragged in, we may consider it
             hasImage = false;
             hasExecutable = false;
             [self.infoField setPlaceholderString:@"Drag and Drop .ppm image file + resize executable"];
@@ -75,6 +68,7 @@ bool hasImage = false;
     });
 }
 
+// reset variables to prepare for a new set of inputs
 - (void)resetState {
     //resets drag view state for new image
     self.execPath = nil;

@@ -85,8 +85,9 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" tabbingMode="disallowed" id="IQv-IB-iLA">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
+                        <windowCollectionBehavior key="collectionBehavior" ignoresCycle="YES" fullScreenNone="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="-8" y="240" width="532" height="472"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
@@ -157,14 +158,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="450" height="328"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <box focusRingType="exterior" boxType="custom" cornerRadius="7" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="bec-GO-w6d">
+                            <box focusRingType="exterior" boxType="custom" borderWidth="3" cornerRadius="6" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="bec-GO-w6d">
                                 <rect key="frame" x="15" y="15" width="420" height="298"/>
                                 <view key="contentView" id="07v-Oj-DNj">
-                                    <rect key="frame" x="1" y="1" width="418" height="296"/>
+                                    <rect key="frame" x="3" y="3" width="414" height="292"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="DAJ-cX-8TE">
-                                            <rect key="frame" x="65" y="89" width="288" height="117"/>
+                                            <rect key="frame" x="65" y="67" width="284" height="156"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="lessThanOrEqual" constant="300" id="JHh-ft-Fh7"/>
                                             </constraints>

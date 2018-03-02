@@ -10,6 +10,7 @@
 
 @implementation ResizingImageView
 
+// this alternative to an NSImageView gives us the same content mode AspectFill behavior from UIKit
 - (id)initWithFrame:(NSRect)frame andImage:(NSImage*)image
 {
     self = [super initWithFrame:frame];

@@ -11,11 +11,10 @@
 @interface ViewController : NSViewController
 
 - (void)setNewImage;
-- (void)loadResizedImagewithBlock:(void (^)(void))completionBlock;
+- (void)loadResizedImageWithBlock:(void (^)(void))completionBlock;
 
 @property (nonatomic) NSString *executablePath;
 @property (nonatomic) NSString *imagePath;
-
 
 @end
 
