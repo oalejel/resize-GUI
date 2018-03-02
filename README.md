@@ -6,8 +6,8 @@ A macOS application meant to showcase the results of *Project 2: CV*'s seam carv
 ![gui gif](https://github.com/oalejel/resize-GUI/blob/master/resize-gif.gif)
 
 ## Example result: "batman" -> "btmn"
-[original batman image](https://github.com/oalejel/resize-GUI/blob/master/batman.png)
+![original batman image](https://github.com/oalejel/resize-GUI/blob/master/batman.png)
 
-[resized batman image](https://github.com/oalejel/resize-GUI/blob/master/batman-shrunk.png)
+![resized batman image](https://github.com/oalejel/resize-GUI/blob/master/batman-shrunk.png)
 
 
