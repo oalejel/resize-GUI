@@ -161,6 +161,7 @@
     NSRect rect = self.bounds;
     rect.origin.x = 0;
     rect.origin.y = 0;
+    self.layer.backgroundColor = [[NSColor windowBackgroundColor] CGColor];
     [self drawRect:rect];
 }
 

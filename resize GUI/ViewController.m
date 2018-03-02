@@ -121,7 +121,7 @@
     [self.view setNeedsDisplay:true];
 }
 
-//
+//called after a window resize is done to signal need for resize execution
 - (void)loadResizedImageWithBlock:(void (^)(void))completionBlock {
     //lock window size
     NSWindow *mainWindow = [[NSApplication sharedApplication] windows][0];
