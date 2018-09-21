@@ -5,6 +5,11 @@ A macOS application meant to showcase the results of *Project 2: CV*'s seam carv
 
 ![gui gif](https://github.com/oalejel/resize-GUI/blob/master/resize-gif.gif)
 
+## Setup
+To run a macOS app with Xcode, you have to adjust the signing settings. **Change the signing team after clicking through the following selections, and then select "Add Account... in the dropdown menu"**
+![settings](https://github.com/oalejel/resize-GUI/blob/master/steps.png)
+
+
 ## Example result: "batman" -> "btmn"
 ![original batman image](https://github.com/oalejel/resize-GUI/blob/master/batman.png)
 
