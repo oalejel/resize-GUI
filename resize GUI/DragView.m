@@ -23,18 +23,13 @@ bool hasImage = false;
 - (BOOL)prepareForDragOperation:(id<NSDraggingInfo>)sender {
     NSPasteboard *pb = [sender draggingPasteboard];
     NSArray *files = [pb propertyListForType:NSFilenamesPboardType];
-    NSString *fileString = [files lastObject];
+    NSString *filePath = [files lastObject];
 
     //check for correct input
-    if ([[fileString substringFromIndex:[fileString length] - 7] isEqualToString:@"/resize"]) {
-        [self.parentController setExecutablePath:fileString];
-        hasExecutable = true;
-        NSLog(@"got resize");
-        [self adjustInfoField];
-    } else if ([fileString containsString:@".ppm"]) {
+    if ([filePath containsString:@".ppm"]) {
         //case where we still have no image
-         NSLog(@"got image");
-        [self.parentController setImagePath:fileString];
+        NSLog(@"got image");
+        [self.parentController setImagePath:filePath];
         if (!hasImage) {
             hasImage = true;
             [self adjustInfoField];
@@ -42,6 +37,12 @@ bool hasImage = false;
             //if we already have an image, we need to handle some cleanup!
             //#WARNING need to handle existing image replacement
         }
+    } else if ([filePath containsString:@"resize"]) {
+        // the executable
+        [self.parentController setExecutablePath:filePath];
+        hasExecutable = true;
+        NSLog(@"got resize");
+        [self adjustInfoField];
     }
     
     return true;
@@ -50,9 +51,9 @@ bool hasImage = false;
 - (void)adjustInfoField {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!hasImage && !hasExecutable) {
-            [self.infoField setPlaceholderString:@"Drag and Drop .ppm image file + resize executable"];
+            [self.infoField setPlaceholderString:@"Drag and Drop .ppm image file + \"resize\" executable"];
         } else if (hasImage && !hasExecutable) {
-            [self.infoField setPlaceholderString:@"Drag and Drop resize executable"];
+            [self.infoField setPlaceholderString:@"Drag and Drop \"resize\" executable"];
         } else if (!hasImage && hasExecutable) {
             [self.infoField setPlaceholderString:@"Drag and Drop .ppm image file"];
         } else {
